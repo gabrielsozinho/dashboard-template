@@ -1,0 +1,23 @@
+{
+    "name": "dashboard-template",
+    "version": "1.0.0",
+    "description": "",
+    "author": "",
+    "private": true,
+    "scripts": {
+        "build-api": "cd api/core && npx tsc",
+        "build-front": "cd front && next build && next export",
+        "build": "cd api/core && npx tsc && cd ../.. && cd front && next build && next export"
+    },
+    "workspaces": [
+        "./front",
+        "./api/core"
+    ],
+    "devDependencies": {
+        "concurrently": "^7.3.0",
+        "turbo": "^1.3.4"
+    },
+    "dependencies": {
+        "semver": "^7.3.7"
+    }
+}

@@ -1,0 +1,45 @@
+generator client {
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "rhel-openssl-1.0.x"]
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+enum RecordStatus {
+  BUILDING
+  SUCCESS
+  ERROR
+  SLEEP
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @db.VarChar(256)
+  password  String   @db.VarChar(256)
+  email     String   @db.VarChar(256)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Type {
+  id        String   @id @default(cuid())
+  name      String   @db.VarChar(256)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  records   Record[]
+}
+
+model Record {
+  id        String       @id @default(cuid())
+  name      String       @db.VarChar(256)
+  typeId    String
+  type      Type         @relation(fields: [typeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  status    RecordStatus
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
